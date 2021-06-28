@@ -6144,6 +6144,11 @@ react-native-parsed-text@0.0.22:
   dependencies:
     prop-types "^15.7.x"
 
+react-native-push-notification@^7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-7.4.0.tgz#81192356eddfee8eeaf72a9a696c7c90bf5b0ece"
+  integrity sha512-Ac3Ep71e2D8Q/Vy0OHBAO5JwhsFsNSuf9knkpXQWS0B9488nIZJLEMuTpF8610xPvGw7XxVrL/q0oZO5F1pOzw==
+
 react-native-reanimated@^1.8.0:
   version "1.13.3"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.3.tgz#fb0e1d582c8866015140f2159e147ffe6e798a3a"
