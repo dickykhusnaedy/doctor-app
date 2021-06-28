@@ -10,7 +10,7 @@ const Doctor = ({navigation}) => {
   const [profile, setProfile] = useState({
     photo: ILNullPhoto,
     fullName: '',
-    profession: '',
+    guru: '',
   });
 
   useEffect(() => {

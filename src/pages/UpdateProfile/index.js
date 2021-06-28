@@ -9,7 +9,7 @@ import {colors, getData, showError, storeData} from '../../utils';
 const UpdateProfile = ({navigation}) => {
   const [profile, setProfile] = useState({
     fullName: '',
-    profession: '',
+    guru: '',
     email: '',
     photoForDB: '',
   });
@@ -54,7 +54,7 @@ const UpdateProfile = ({navigation}) => {
     data.photo = profile.photoForDB;
     delete data.photoForDB;
     Fire.database()
-      .ref(`doctors/${profile.uid}/`)
+      .ref(`guru/${profile.uid}/`)
       .update(data)
       .then(() => {
         storeData('user', data)
@@ -109,9 +109,9 @@ const UpdateProfile = ({navigation}) => {
           />
           <Gap height={24} />
           <Input
-            label="Pekerjaan"
-            value={profile.profession}
-            onChangeText={value => changeText('profession', value)}
+            label="Guru"
+            value={profile.guru}
+            onChangeText={value => changeText('guru', value)}
           />
           <Gap height={24} />
           <Input label="Email" value={profile.email} disable />

@@ -8,6 +8,8 @@ import IconMessages from './ic-messages.svg';
 import IconMessagesActive from './ic-messages-active.svg';
 import IconHospitals from './ic-hospitals.svg';
 import IconHospitalsActive from './ic-hospitals-active.svg';
+import IconHome from './ic-home.svg';
+import IconHomeActive from './ic-home-active.svg';
 import IconStar from './ic-star.svg';
 import IconNext from './ic-next.svg';
 import IconSendDark from './ic-send-dark.svg';
@@ -30,6 +32,8 @@ export {
   IconMessagesActive,
   IconHospitals,
   IconHospitalsActive,
+  IconHome,
+  IconHomeActive,
   IconStar,
   IconNext,
   IconSendDark,

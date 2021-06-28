@@ -17,7 +17,7 @@ const Login = ({navigation}) => {
       .then(res => {
         dispatch({type: 'SET_LOADING', value: false});
         Fire.database()
-          .ref(`doctors/${res.user.uid}/`)
+          .ref(`guru/${res.user.uid}/`)
           .once('value')
           .then(resDB => {
             if (resDB.val()) {

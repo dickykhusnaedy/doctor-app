@@ -9,41 +9,13 @@ const Register = ({navigation}) => {
   const dispatch = useDispatch();
   const [form, setForm] = useForm({
     fullName: '',
-    category: 'dokter umum',
+    guru: '',
     university: '',
     str_number: '',
-    hospital_address: '',
     gender: 'pria',
     email: '',
     password: '',
   });
-  const [itemCategory] = useState([
-    {
-      id: 1,
-      label: 'Dokter Umum',
-      value: 'dokter umum',
-    },
-    {
-      id: 2,
-      label: 'Psikiater',
-      value: 'psikiater',
-    },
-    {
-      id: 3,
-      label: 'Dokter Obat',
-      value: 'dokter obat',
-    },
-    {
-      id: 4,
-      label: 'Dokter Anak',
-      value: 'dokter anak',
-    },
-    {
-      id: 5,
-      label: 'Dokter Bedah',
-      value: 'dokter bedah',
-    },
-  ]);
 
   const [itemGender] = useState([
     {
@@ -67,19 +39,18 @@ const Register = ({navigation}) => {
         setForm('reset');
         const data = {
           fullName: form.fullName,
-          profession: form.category,
-          category: form.category,
+          guru: form.guru,
           rate: 0,
           university: form.university,
           str_number: form.str_number,
-          hospital_address: form.hospital_address,
           gender: form.gender,
           email: form.email,
+          password: form.password,
           uid: success.user.uid,
         };
 
         Fire.database()
-          .ref(`doctors/${success.user.uid}/`)
+          .ref(`guru/${success.user.uid}/`)
           .set(data);
 
         storeData('user', data);
@@ -102,11 +73,9 @@ const Register = ({navigation}) => {
           />
           <Gap height={24} />
           <Input
-            label="Kategori"
-            value={form.category}
-            onValueChange={value => setForm('category', value)}
-            select
-            selectItem={itemCategory}
+            label="Guru"
+            value={form.guru}
+            onChangeText={value => setForm('guru', value)}
           />
           <Gap height={24} />
           <Input
@@ -119,12 +88,6 @@ const Register = ({navigation}) => {
             label="Nomor STR"
             value={form.str_number}
             onChangeText={value => setForm('str_number', value)}
-          />
-          <Gap height={24} />
-          <Input
-            label="Alamat Rumah Sakit"
-            value={form.hospital_address}
-            onChangeText={value => setForm('hospital_address', value)}
           />
           <Gap height={24} />
           <Input

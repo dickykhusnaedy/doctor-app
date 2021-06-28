@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Header, ChatItem, InputChat} from '../../components';
 import {
   fonts,
@@ -12,26 +12,27 @@ import {
 import {Fire} from '../../config';
 
 const Chatting = ({navigation, route}) => {
-  const dataDoctor = route.params;
+  const dataUstadz = route.params;
   const [chatContent, setChatContent] = useState('');
   const [user, setUser] = useState({});
   const [chatData, setChatData] = useState([]);
 
   useEffect(() => {
     getDataUserFromLocal();
-    const chatID = `${dataDoctor.data.uid}_${user.uid}`;
-    const urlFirebase = `chatting/${chatID}/allChat/`;
+    const chatID = `${dataUstadz.data.uid}-${dataUstadz.data.fullName}_${user.uid}-${user.fullName}`;
+    const urlFirebase = `chatting/${chatID}/allchat/`;
     Fire.database()
       .ref(urlFirebase)
-      .on('value', snapshot => {
+      .on('value', (snapshot) => {
+        console.log('data chat: ', snapshot.val());
         if (snapshot.val()) {
           const dataSnapshot = snapshot.val();
           const allDataChat = [];
-          Object.keys(dataSnapshot).map(key => {
+          Object.keys(dataSnapshot).map((key) => {
             const dataChat = dataSnapshot[key];
             const newDataChat = [];
 
-            Object.keys(dataChat).map(itemChat => {
+            Object.keys(dataChat).map((itemChat) => {
               newDataChat.push({
                 id: itemChat,
                 data: dataChat[itemChat],
@@ -43,18 +44,21 @@ const Chatting = ({navigation, route}) => {
               data: newDataChat,
             });
           });
+          console.log('all data chat: ', allDataChat);
           setChatData(allDataChat);
         }
       });
-  }, [dataDoctor.data.uid, user.uid]);
+  }, [dataUstadz.data.uid, user.uid]);
 
   const getDataUserFromLocal = () => {
-    getData('user').then(res => {
+    getData('user').then((res) => {
+      console.log('userlogin: ', res);
       setUser(res);
     });
   };
 
   const chatSend = () => {
+    console.log('user: ', user);
     const today = new Date();
 
     const data = {
@@ -64,37 +68,37 @@ const Chatting = ({navigation, route}) => {
       chatContent: chatContent,
     };
 
-    const chatID = `${dataDoctor.data.uid}_${user.uid}`;
+    const chatID = `${dataUstadz.data.uid}-${dataUstadz.data.fullName}_${user.uid}-${user.fullName}`;
 
-    const urlFirebase = `chatting/${chatID}/allChat/${setDateChat(today)}`;
-    const urlMessageUser = `messages/${user.uid}/${chatID}`;
-    const urlMessageDoctor = `messages/${dataDoctor.data.uid}/${chatID}`;
+    const urlFirebase = `chatting/${chatID}/allchat/${setDateChat(today)}`;
+    const urlMessageUser = `messages/${user.uid}-${user.fullName}/${chatID}`;
+    const urlMessageUstadz = `messages/${dataUstadz.data.uid}-${dataUstadz.data.fullName}/${chatID}`;
     const dataHistoryChatForUser = {
       lastContentChat: chatContent,
       lastChatDate: today.getTime(),
-      uidPartner: dataDoctor.data.uid,
+      uidPartner: dataUstadz.data.uid,
     };
-    const dataHistoryChatForDoctor = {
+    const dataHistoryChatForUstadz = {
       lastContentChat: chatContent,
       lastChatDate: today.getTime(),
       uidPartner: user.uid,
     };
+    // console.log('data untuk dikirim: ', data);
+    // console.log('url firebase: ', urlFirebase);
+
+    //kirim ke firebase
     Fire.database()
       .ref(urlFirebase)
       .push(data)
       .then(() => {
         setChatContent('');
         // set history for user
-        Fire.database()
-          .ref(urlMessageUser)
-          .set(dataHistoryChatForUser);
+        Fire.database().ref(urlMessageUser).set(dataHistoryChatForUser);
 
-        // set history for dataDoctor
-        Fire.database()
-          .ref(urlMessageDoctor)
-          .set(dataHistoryChatForDoctor);
+        // set history for ustadz
+        Fire.database().ref(urlMessageUstadz).set(dataHistoryChatForUstadz);
       })
-      .catch(err => {
+      .catch((err) => {
         showError(err.message);
       });
   };
@@ -102,23 +106,18 @@ const Chatting = ({navigation, route}) => {
     <View style={styles.page}>
       <Header
         type="dark-profile"
-        title={dataDoctor.data.fullName}
-        desc={dataDoctor.data.category}
-        photo={{uri: dataDoctor.data.photo}}
+        title={dataUstadz.data.fullName}
+        desc={dataUstadz.data.guru}
+        photo={{uri: dataUstadz.data.photo}}
         onPress={() => navigation.goBack()}
       />
       <View style={styles.content}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          ref={scroll => {
-            this.scroll = scroll;
-          }}
-          onContentSizeChange={() => this.scroll.scrollToEnd()}>
-          {chatData.map(chat => {
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {chatData.map((chat) => {
             return (
               <View key={chat.id}>
                 <Text style={styles.chatDate}>{chat.id}</Text>
-                {chat.data.map(itemChat => {
+                {chat.data.map((itemChat) => {
                   const isMe = itemChat.data.sendBy === user.uid;
                   return (
                     <ChatItem
@@ -126,7 +125,7 @@ const Chatting = ({navigation, route}) => {
                       isMe={isMe}
                       text={itemChat.data.chatContent}
                       date={itemChat.data.chatTime}
-                      photo={isMe ? null : {uri: dataDoctor.data.photo}}
+                      photo={isMe ? null : {uri: dataUstadz.data.photo}}
                     />
                   );
                 })}
@@ -137,9 +136,9 @@ const Chatting = ({navigation, route}) => {
       </View>
       <InputChat
         value={chatContent}
-        onChangeText={value => setChatContent(value)}
+        onChangeText={(value) => setChatContent(value)}
         onButtonPress={chatSend}
-        targetChat={dataDoctor}
+        targetChat={dataUstadz}
       />
     </View>
   );

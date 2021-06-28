@@ -1,11 +1,24 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Gap, Header, List, Profile} from '../../components';
+import {Header, Profile, List, Gap} from '../../components';
+import {colors, getData} from '../../utils';
+import {ILNullPhoto} from '../../assets';
 import {Fire} from '../../config';
-import {showError} from '../../utils';
+import {showMessage} from 'react-native-flash-message';
 
-const UserProfile = ({navigation, route}) => {
-  const profile = route.params;
+const UserProfile = ({navigation}) => {
+  const [profile, setProfile] = useState({
+    fullName: '',
+    kelas: '',
+    photo: ILNullPhoto,
+  });
+  useEffect(() => {
+    getData('user').then((res) => {
+      const data = res;
+      data.photo = {uri: res.photo};
+      setProfile(data);
+    });
+  }, []);
 
   const signOut = () => {
     Fire.auth()
@@ -24,7 +37,7 @@ const UserProfile = ({navigation, route}) => {
       {profile.fullName.length > 0 && (
         <Profile
           name={profile.fullName}
-          desc={profile.profession}
+          desc={profile.guru}
           photo={profile.photo}
         />
       )}
@@ -37,11 +50,12 @@ const UserProfile = ({navigation, route}) => {
         onPress={() => navigation.navigate('UpdateProfile')}
       />
       <List
-        name="Languange"
-        desc="Last Update Yesterday"
-        type="next"
-        icon="language"
-      />
+          name="About Us"
+          desc="Last Update Yesterday"
+          type="next"
+          icon="language"
+          onPress={() => navigation.navigate('AboutUs')}
+        />
       <List
         name="Give Us Rate"
         desc="Last Update Yesterday"

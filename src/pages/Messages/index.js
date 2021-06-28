@@ -11,20 +11,20 @@ const Messages = ({navigation}) => {
   useEffect(() => {
     getDataUserFromLocal();
     const rootDB = Fire.database().ref();
-    const urlHistory = `messages/${user.uid}/`;
+    const urlHistory = `messages/${user.uid}-${user.fullName}/`;
     const messagesDB = rootDB.child(urlHistory);
 
-    messagesDB.on('value', async snapshot => {
+    messagesDB.on('value', async (snapshot) => {
       if (snapshot.val()) {
         const oldData = snapshot.val();
         const data = [];
 
-        const promises = await Object.keys(oldData).map(async key => {
-          const urlUidDoctor = `users/${oldData[key].uidPartner}`;
-          const detailDoctor = await rootDB.child(urlUidDoctor).once('value');
+        const promises = await Object.keys(oldData).map(async (key) => {
+          const urlUidUstadz = `users/${oldData[key].uidPartner}`;
+          const detailUstadz = await rootDB.child(urlUidUstadz).once('value');
           data.push({
             id: key,
-            detailDoctor: detailDoctor.val(),
+            detailUstadz: detailUstadz.val(),
             ...oldData[key],
           });
         });
@@ -35,6 +35,7 @@ const Messages = ({navigation}) => {
       }
     });
   }, [user.uid]);
+  
 
   const getDataUserFromLocal = () => {
     getData('user').then(res => {
@@ -45,18 +46,18 @@ const Messages = ({navigation}) => {
     <View style={styles.page}>
       <View style={styles.content}>
         <Text style={styles.title}>Messages</Text>
-        {historyChat.map(chat => {
-          const dataDoctor = {
-            id: chat.detailDoctor.uid,
-            data: chat.detailDoctor,
+        {historyChat.map((chat) => {
+          const dataUstadz = {
+            id: chat.detailUstadz.uid,
+            data: chat.detailUstadz,
           };
           return (
             <List
               key={chat.id}
-              profile={{uri: chat.detailDoctor.photo}}
-              name={chat.detailDoctor.fullName}
+              profile={{uri: chat.detailUstadz.photo}}
+              name={chat.detailUstadz.fullName}
               desc={chat.lastContentChat}
-              onPress={() => navigation.navigate('Chatting', dataDoctor)}
+              onPress={() => navigation.navigate('Chatting', dataUstadz)}
             />
           );
         })}

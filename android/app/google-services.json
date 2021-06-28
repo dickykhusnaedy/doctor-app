@@ -1,0 +1,97 @@
+{
+  "project_info": {
+    "project_number": "447410585443",
+    "project_id": "push-f7e77",
+    "storage_bucket": "push-f7e77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447410585443:android:9dfcfd2b63e9fd7cca1d56",
+        "android_client_info": {
+          "package_name": "com.mydoctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "447410585443-qggmba13gf0mic5qh8d19teshqma10rk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxoZMf3rCPLmtweaJOZ2u-j7xrBp92o-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "447410585443-qggmba13gf0mic5qh8d19teshqma10rk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447410585443:android:0340c69f6df249cbca1d56",
+        "android_client_info": {
+          "package_name": "com.prawito.doctorapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "447410585443-qggmba13gf0mic5qh8d19teshqma10rk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxoZMf3rCPLmtweaJOZ2u-j7xrBp92o-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "447410585443-qggmba13gf0mic5qh8d19teshqma10rk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447410585443:android:bfe318bf9adb736cca1d56",
+        "android_client_info": {
+          "package_name": "com.pushnotif"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "447410585443-qggmba13gf0mic5qh8d19teshqma10rk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxoZMf3rCPLmtweaJOZ2u-j7xrBp92o-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "447410585443-qggmba13gf0mic5qh8d19teshqma10rk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

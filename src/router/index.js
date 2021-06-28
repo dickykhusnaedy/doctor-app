@@ -14,6 +14,7 @@ import {
   UserProfile,
   UpdateProfile,
   DoctorProfile,
+  AboutUs,
 } from '../pages';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomNavigator} from '../components';
@@ -24,9 +25,9 @@ const Tab = createBottomTabNavigator();
 const MainApp = () => {
   return (
     <Tab.Navigator tabBar={props => <BottomNavigator {...props} />}>
-      <Tab.Screen name="Doctor" component={Doctor} />
+      <Tab.Screen name="Home" component={Doctor} />
       <Tab.Screen name="Messages" component={Messages} />
-      <Tab.Screen name="Hospitals" component={Hospitals} />
+      <Tab.Screen name="Profile" component={UserProfile} />
     </Tab.Navigator>
   );
 };
@@ -87,6 +88,11 @@ const Router = () => {
       <Stack.Screen
         name="DoctorProfile"
         component={DoctorProfile}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AboutUs"
+        component={AboutUs}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
