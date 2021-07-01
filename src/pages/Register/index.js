@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Button, Gap, Header, Input} from '../../components';
 import {Fire} from '../../config';
 import {colors, showError, storeData, useForm} from '../../utils';
+import messaging from '@react-native-firebase/messaging';
 
 const Register = ({navigation}) => {
   const dispatch = useDispatch();
+  const [getToken, setGetToken] = useState('');
   const [form, setForm] = useForm({
     fullName: '',
     guru: '',
@@ -47,6 +49,7 @@ const Register = ({navigation}) => {
           email: form.email,
           password: form.password,
           uid: success.user.uid,
+          token: getToken,
         };
 
         Fire.database()
@@ -61,6 +64,30 @@ const Register = ({navigation}) => {
         showError(err.message);
       });
   };
+
+  useEffect(() => {
+    messaging()
+      .requestPermission()
+      .then(authStatus => {
+        if (
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          // eslint-disable-next-line eqeqeq
+          authStatus == messaging.AuthorizationStatus.PROVISIONAL
+        ) {
+          messaging()
+            .getToken()
+            .then(token => {
+              console.log('message.getToken ', token);
+              setGetToken(token);
+            });
+
+          messaging().onTokenRefresh(token => {
+            console.log('messaging.onTokenRefresh: ', token);
+          });
+        }
+      });
+  }, []);
+
   return (
     <View style={styles.page}>
       <Header onPress={() => navigation.goBack()} title="Daftar Akun" />

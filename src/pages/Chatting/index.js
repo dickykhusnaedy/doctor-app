@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Header, ChatItem, InputChat} from '../../components';
 import {
@@ -13,26 +13,29 @@ import {Fire} from '../../config';
 
 const Chatting = ({navigation, route}) => {
   const dataUstadz = route.params;
+  const scrollViewRef = useRef();
   const [chatContent, setChatContent] = useState('');
   const [user, setUser] = useState({});
   const [chatData, setChatData] = useState([]);
 
   useEffect(() => {
     getDataUserFromLocal();
-    const chatID = `${dataUstadz.data.uid}-${dataUstadz.data.fullName}_${user.uid}-${user.fullName}`;
+    const chatID = `${dataUstadz.data.uid}-${dataUstadz.data.fullName}_${
+      user.uid
+    }-${user.fullName}`;
     const urlFirebase = `chatting/${chatID}/allchat/`;
     Fire.database()
       .ref(urlFirebase)
-      .on('value', (snapshot) => {
+      .on('value', snapshot => {
         console.log('data chat: ', snapshot.val());
         if (snapshot.val()) {
           const dataSnapshot = snapshot.val();
           const allDataChat = [];
-          Object.keys(dataSnapshot).map((key) => {
+          Object.keys(dataSnapshot).map(key => {
             const dataChat = dataSnapshot[key];
             const newDataChat = [];
 
-            Object.keys(dataChat).map((itemChat) => {
+            Object.keys(dataChat).map(itemChat => {
               newDataChat.push({
                 id: itemChat,
                 data: dataChat[itemChat],
@@ -48,14 +51,16 @@ const Chatting = ({navigation, route}) => {
           setChatData(allDataChat);
         }
       });
-  }, [dataUstadz.data.uid, user.uid]);
+  }, [dataUstadz.data.fullName, dataUstadz.data.uid, user.fullName, user.uid]);
 
   const getDataUserFromLocal = () => {
-    getData('user').then((res) => {
+    getData('user').then(res => {
       console.log('userlogin: ', res);
       setUser(res);
     });
   };
+
+  console.log(dataUstadz);
 
   const chatSend = () => {
     console.log('user: ', user);
@@ -68,23 +73,26 @@ const Chatting = ({navigation, route}) => {
       chatContent: chatContent,
     };
 
-    const chatID = `${dataUstadz.data.uid}-${dataUstadz.data.fullName}_${user.uid}-${user.fullName}`;
+    const chatID = `${dataUstadz.data.uid}-${dataUstadz.data.fullName}_${
+      user.uid
+    }-${user.fullName}`;
 
     const urlFirebase = `chatting/${chatID}/allchat/${setDateChat(today)}`;
     const urlMessageUser = `messages/${user.uid}-${user.fullName}/${chatID}`;
-    const urlMessageUstadz = `messages/${dataUstadz.data.uid}-${dataUstadz.data.fullName}/${chatID}`;
+    const urlMessageUstadz = `messages/${dataUstadz.data.uid}-${
+      dataUstadz.data.fullName
+    }/${chatID}`;
     const dataHistoryChatForUser = {
       lastContentChat: chatContent,
       lastChatDate: today.getTime(),
       uidPartner: dataUstadz.data.uid,
+      token: user.token,
     };
     const dataHistoryChatForUstadz = {
       lastContentChat: chatContent,
       lastChatDate: today.getTime(),
       uidPartner: user.uid,
     };
-    // console.log('data untuk dikirim: ', data);
-    // console.log('url firebase: ', urlFirebase);
 
     //kirim ke firebase
     Fire.database()
@@ -93,14 +101,49 @@ const Chatting = ({navigation, route}) => {
       .then(() => {
         setChatContent('');
         // set history for user
-        Fire.database().ref(urlMessageUser).set(dataHistoryChatForUser);
+        Fire.database()
+          .ref(urlMessageUser)
+          .set(dataHistoryChatForUser);
 
         // set history for ustadz
-        Fire.database().ref(urlMessageUstadz).set(dataHistoryChatForUstadz);
+        Fire.database()
+          .ref(urlMessageUstadz)
+          .set(dataHistoryChatForUstadz);
       })
-      .catch((err) => {
+      .catch(err => {
         showError(err.message);
       });
+
+    fetch('https://fcm.googleapis.com/fcm/send', {
+      method: 'POST',
+      headers: {
+        Authorization:
+          'key=AAAAaCu_v2M:APA91bGMRyW-oT39uFwZjWAM-x6EdRYXccc7kvQeH1H2B9ws3mx9i-O02ANCqm1vNu5DYUFRY-vg7VynCg95FbppCmX2QPGPuXEGYEWbJVz5CGZ2bcItG3Q4E0j12Xc63WJhNwV4KRem',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: `${dataUstadz.data.token}`,
+        soundName: 'default',
+        notification: {
+          title: `${user.fullName}`,
+          body: `${chatContent}`,
+        },
+        data: {
+          msgType: 'Chat',
+          id: `${chatID}`,
+          detailUstadz: {
+            token: `${user.token}`,
+            email: `${user.email}`,
+            fullName: `${user.fullName}`,
+            gender: `${user.gender}`,
+            guru: `${user.guru}`,
+            photo:
+              'https://www.gstatic.com/mobilesdk/160503_mobilesdk/logo/2x/firebase_28dp.png',
+            uid: `${user.uid}`,
+          },
+        },
+      }),
+    });
   };
   return (
     <View style={styles.page}>
@@ -112,12 +155,15 @@ const Chatting = ({navigation, route}) => {
         onPress={() => navigation.goBack()}
       />
       <View style={styles.content}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {chatData.map((chat) => {
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          ref={scrollViewRef}
+          onContentSizeChange={() => scrollViewRef.current.scrollToEnd()}>
+          {chatData.map(chat => {
             return (
               <View key={chat.id}>
                 <Text style={styles.chatDate}>{chat.id}</Text>
-                {chat.data.map((itemChat) => {
+                {chat.data.map(itemChat => {
                   const isMe = itemChat.data.sendBy === user.uid;
                   return (
                     <ChatItem
@@ -136,7 +182,7 @@ const Chatting = ({navigation, route}) => {
       </View>
       <InputChat
         value={chatContent}
-        onChangeText={(value) => setChatContent(value)}
+        onChangeText={value => setChatContent(value)}
         onButtonPress={chatSend}
         targetChat={dataUstadz}
       />

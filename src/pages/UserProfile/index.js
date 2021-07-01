@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Header, Profile, List, Gap} from '../../components';
-import {colors, getData} from '../../utils';
 import {ILNullPhoto} from '../../assets';
+import {Gap, Header, List, Profile} from '../../components';
 import {Fire} from '../../config';
-import {showMessage} from 'react-native-flash-message';
+import {getData, showError} from '../../utils';
 
 const UserProfile = ({navigation}) => {
   const [profile, setProfile] = useState({
@@ -13,7 +12,7 @@ const UserProfile = ({navigation}) => {
     photo: ILNullPhoto,
   });
   useEffect(() => {
-    getData('user').then((res) => {
+    getData('user').then(res => {
       const data = res;
       data.photo = {uri: res.photo};
       setProfile(data);
@@ -50,12 +49,12 @@ const UserProfile = ({navigation}) => {
         onPress={() => navigation.navigate('UpdateProfile')}
       />
       <List
-          name="About Us"
-          desc="Last Update Yesterday"
-          type="next"
-          icon="language"
-          onPress={() => navigation.navigate('AboutUs')}
-        />
+        name="About Us"
+        desc="Last Update Yesterday"
+        type="next"
+        icon="language"
+        onPress={() => navigation.navigate('AboutUs')}
+      />
       <List
         name="Give Us Rate"
         desc="Last Update Yesterday"

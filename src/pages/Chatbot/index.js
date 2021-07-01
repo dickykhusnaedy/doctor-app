@@ -57,13 +57,13 @@ class App extends Component {
       user: BOT,
     };
 
-    this.setState((previouseState) => ({
+    this.setState(previouseState => ({
       messages: GiftedChat.append(previouseState.messages, [msg]),
     }));
   }
 
   onSend(messages = []) {
-    this.setState((previouseState) => ({
+    this.setState(previouseState => ({
       messages: GiftedChat.append(previouseState.messages, messages),
     }));
 
@@ -71,13 +71,13 @@ class App extends Component {
 
     Dialogflow_V2.requestQuery(
       message,
-      (result) => this.handleGoogleResponse(result),
-      (error) => console.log(error),
+      result => this.handleGoogleResponse(result),
+      error => console.log(error),
     );
   }
 
   onQuickReply(quickReply) {
-    this.setState((previouseState) => ({
+    this.setState(previouseState => ({
       messages: GiftedChat.append(previouseState.messages, quickReply),
     }));
 
@@ -85,8 +85,8 @@ class App extends Component {
 
     Dialogflow_V2.requestQuery(
       message,
-      (result) => this.handleGoogleResponse(result),
-      (error) => console.log(error),
+      result => this.handleGoogleResponse(result),
+      error => console.log(error),
     );
   }
 
@@ -102,8 +102,8 @@ class App extends Component {
         />
         <GiftedChat
           messages={this.state.messages}
-          onSend={(message) => this.onSend(message)}
-          onQuickReply={(quickReply) => this.onQuickReply(quickReply)}
+          onSend={message => this.onSend(message)}
+          onQuickReply={quickReply => this.onQuickReply(quickReply)}
           user={{_id: 1}}
         />
       </View>

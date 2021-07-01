@@ -1,14 +1,16 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {ILLogo} from '../../assets';
 import {Button, Gap, Input, Link} from '../../components';
 import {Fire} from '../../config';
 import {colors, fonts, showError, storeData, useForm} from '../../utils';
+import messaging from '@react-native-firebase/messaging';
 
 const Login = ({navigation}) => {
   const [form, setForm] = useForm({email: '', password: ''});
   const dispatch = useDispatch();
+  const [getToken, setGetToken] = useState('');
 
   const login = () => {
     dispatch({type: 'SET_LOADING', value: true});
@@ -20,8 +22,23 @@ const Login = ({navigation}) => {
           .ref(`guru/${res.user.uid}/`)
           .once('value')
           .then(resDB => {
+            const dataLogin = {
+              email: resDB.val().email,
+              fullName: resDB.val().fullName,
+              gender: resDB.val().gender,
+              guru: resDB.val().guru,
+              university: resDB.val().university,
+              str_number: resDB.val().str_number,
+              rate: resDB.val().rate,
+              token: getToken,
+              password: resDB.val().password,
+              uid: resDB.val().uid,
+            };
             if (resDB.val()) {
-              storeData('user', resDB.val());
+              Fire.database()
+                .ref(`guru/${res.user.uid}/`)
+                .update(dataLogin);
+              storeData('user', dataLogin);
               navigation.replace('MainApp');
             }
           });
@@ -31,6 +48,28 @@ const Login = ({navigation}) => {
         showError(err.message);
       });
   };
+
+  useEffect(() => {
+    messaging()
+      .requestPermission()
+      .then(authStatus => {
+        if (
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          // eslint-disable-next-line eqeqeq
+          authStatus == messaging.AuthorizationStatus.PROVISIONAL
+        ) {
+          messaging()
+            .getToken()
+            .then(token => {
+              setGetToken(token);
+            });
+
+          messaging().onTokenRefresh(token => {
+            console.log('messaging.onTokenRefresh: ', token);
+          });
+        }
+      });
+  }, []);
 
   return (
     <View style={styles.page}>

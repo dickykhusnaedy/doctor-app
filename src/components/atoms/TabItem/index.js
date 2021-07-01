@@ -38,7 +38,7 @@ export default TabItem;
 
 const styles = StyleSheet.create({
   container: {alignItems: 'center'},
-  text: (active) => ({
+  text: active => ({
     fontSize: 10,
     color: active ? colors.text.menuActive : colors.text.menuInactive,
     fontFamily: fonts.primary[600],

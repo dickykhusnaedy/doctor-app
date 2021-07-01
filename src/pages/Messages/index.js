@@ -14,12 +14,12 @@ const Messages = ({navigation}) => {
     const urlHistory = `messages/${user.uid}-${user.fullName}/`;
     const messagesDB = rootDB.child(urlHistory);
 
-    messagesDB.on('value', async (snapshot) => {
+    messagesDB.on('value', async snapshot => {
       if (snapshot.val()) {
         const oldData = snapshot.val();
         const data = [];
 
-        const promises = await Object.keys(oldData).map(async (key) => {
+        const promises = await Object.keys(oldData).map(async key => {
           const urlUidUstadz = `users/${oldData[key].uidPartner}`;
           const detailUstadz = await rootDB.child(urlUidUstadz).once('value');
           data.push({
@@ -34,19 +34,21 @@ const Messages = ({navigation}) => {
         setHistoryChat(data);
       }
     });
-  }, [user.uid]);
-  
+  }, [user.fullName, user.uid]);
 
   const getDataUserFromLocal = () => {
     getData('user').then(res => {
       setUser(res);
     });
   };
+
+  console.log(historyChat);
+
   return (
     <View style={styles.page}>
       <View style={styles.content}>
         <Text style={styles.title}>Messages</Text>
-        {historyChat.map((chat) => {
+        {historyChat.map(chat => {
           const dataUstadz = {
             id: chat.detailUstadz.uid,
             data: chat.detailUstadz,
