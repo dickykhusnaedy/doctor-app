@@ -9,7 +9,7 @@ import {
   IconHelp,
 } from '../../../assets';
 
-const List = ({profile, name, desc, type, onPress, icon}) => {
+const List = ({profile, name, desc, time, type, onPress, icon}) => {
   const Icon = () => {
     if (icon === 'edit-profile') {
       return <IconEditProfile />;
@@ -31,6 +31,9 @@ const List = ({profile, name, desc, type, onPress, icon}) => {
       <View style={styles.content}>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.desc}>{desc}</Text>
+      </View>
+      <View style={styles.rate}>
+        <Text style={styles.desc}>{time}</Text>
       </View>
       {type === 'next' && <IconNext />}
     </TouchableOpacity>

@@ -42,27 +42,37 @@ const Messages = ({navigation}) => {
     });
   };
 
-  console.log(historyChat);
-
   return (
     <View style={styles.page}>
       <View style={styles.content}>
         <Text style={styles.title}>Messages</Text>
-        {historyChat.map(chat => {
-          const dataUstadz = {
-            id: chat.detailUstadz.uid,
-            data: chat.detailUstadz,
-          };
-          return (
-            <List
-              key={chat.id}
-              profile={{uri: chat.detailUstadz.photo}}
-              name={chat.detailUstadz.fullName}
-              desc={chat.lastContentChat}
-              onPress={() => navigation.navigate('Chatting', dataUstadz)}
-            />
-          );
-        })}
+        {historyChat
+          .map(chat => {
+            const dataUstadz = {
+              id: chat.detailUstadz.uid,
+              data: chat.detailUstadz,
+            };
+            return (
+              <List
+                key={chat.id}
+                profile={{uri: chat.detailUstadz.photo}}
+                name={chat.detailUstadz.fullName}
+                desc={chat.lastContentChat}
+                time={chat.lastChatDatetime}
+                datetime={chat.lastChatDatetime}
+                onPress={() => navigation.navigate('Chatting', dataUstadz)}
+              />
+            );
+          })
+          .sort((a, b) => {
+            if (a.props.datetime <= b.props.datetime) {
+              return 1;
+            }
+            if (a.props.datetime >= b.props.datetime) {
+              return -1;
+            }
+            return 0;
+          })}
       </View>
     </View>
   );

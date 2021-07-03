@@ -12,3 +12,14 @@ export const setDateChat = oldDate => {
 
   return `${year}-${month}-${date}`;
 };
+
+export const getDateTime = datetime => {
+  const year = datetime.getFullYear();
+  const month = datetime.getMonth() + 1;
+  const date = datetime.getDate();
+  const time = datetime.getHours();
+  const minutes = datetime.getMinutes();
+  const seconds = datetime.getSeconds();
+
+  return `${year}-${month}-${date} ${time}:${minutes}:${seconds}`;
+};

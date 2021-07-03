@@ -8,6 +8,7 @@ import {
   showError,
   getChatTime,
   setDateChat,
+  getDateTime,
 } from '../../utils';
 import {Fire} from '../../config';
 
@@ -55,7 +56,6 @@ const Chatting = ({navigation, route}) => {
 
   const getDataUserFromLocal = () => {
     getData('user').then(res => {
-      console.log('userlogin: ', res);
       setUser(res);
     });
   };
@@ -63,7 +63,6 @@ const Chatting = ({navigation, route}) => {
   console.log(dataUstadz);
 
   const chatSend = () => {
-    console.log('user: ', user);
     const today = new Date();
 
     const data = {
@@ -71,6 +70,7 @@ const Chatting = ({navigation, route}) => {
       chatDate: today.getTime(),
       chatTime: getChatTime(today),
       chatContent: chatContent,
+      lastChatDatetime: getDateTime(today),
     };
 
     const chatID = `${dataUstadz.data.uid}-${dataUstadz.data.fullName}_${
@@ -84,14 +84,16 @@ const Chatting = ({navigation, route}) => {
     }/${chatID}`;
     const dataHistoryChatForUser = {
       lastContentChat: chatContent,
-      lastChatDate: today.getTime(),
+      lastChatDate: getChatTime(today),
       uidPartner: dataUstadz.data.uid,
       token: user.token,
+      lastChatDatetime: getDateTime(today),
     };
     const dataHistoryChatForUstadz = {
       lastContentChat: chatContent,
-      lastChatDate: today.getTime(),
+      lastChatDate: getChatTime(today),
       uidPartner: user.uid,
+      lastChatDatetime: getDateTime(today),
     };
 
     //kirim ke firebase
