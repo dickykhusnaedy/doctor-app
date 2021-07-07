@@ -84,14 +84,16 @@ const Chatting = ({navigation, route}) => {
     }/${chatID}`;
     const dataHistoryChatForUser = {
       lastContentChat: chatContent,
-      lastChatDate: getChatTime(today),
+      lastChatDate: setDateChat(today),
+      lastChatTime: getChatTime(today),
       uidPartner: dataUstadz.data.uid,
       token: user.token,
       lastChatDatetime: getDateTime(today),
     };
     const dataHistoryChatForUstadz = {
       lastContentChat: chatContent,
-      lastChatDate: getChatTime(today),
+      lastChatDate: setDateChat(today),
+      lastChatTime: getChatTime(today),
       uidPartner: user.uid,
       lastChatDatetime: getDateTime(today),
     };

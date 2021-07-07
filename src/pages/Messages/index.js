@@ -52,13 +52,14 @@ const Messages = ({navigation}) => {
               id: chat.detailUstadz.uid,
               data: chat.detailUstadz,
             };
+            console.log(chat);
             return (
               <List
                 key={chat.id}
                 profile={{uri: chat.detailUstadz.photo}}
                 name={chat.detailUstadz.fullName}
                 desc={chat.lastContentChat}
-                time={chat.lastChatDatetime}
+                time={chat.lastChatTime}
                 datetime={chat.lastChatDatetime}
                 onPress={() => navigation.navigate('Chatting', dataUstadz)}
               />
