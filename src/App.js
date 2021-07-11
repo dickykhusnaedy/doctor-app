@@ -15,6 +15,7 @@ var fcmSubscribe = null;
 const MainApp = () => {
   const stateGlobal = useSelector(state => state);
   LogBox.ignoreAllLogs();
+  LogBox.ignoreLogs(['Setting a timer for a long period of time']);
   const [loading, setLoading] = useState(true);
 
   const forwardToChatPage = (idChat, dataChat) => {
