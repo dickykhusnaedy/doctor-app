@@ -27,11 +27,11 @@ const Login = ({navigation}) => {
               fullName: resDB.val().fullName,
               gender: resDB.val().gender,
               guru: resDB.val().guru,
+              photo: resDB.val().photo,
               university: resDB.val().university,
               str_number: resDB.val().str_number,
               rate: resDB.val().rate,
               token: getToken,
-              password: resDB.val().password,
               uid: resDB.val().uid,
             };
             if (resDB.val()) {
