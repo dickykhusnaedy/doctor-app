@@ -47,7 +47,6 @@ const Register = ({navigation}) => {
           str_number: form.str_number,
           gender: form.gender,
           email: form.email,
-          password: form.password,
           uid: success.user.uid,
           token: getToken,
         };
