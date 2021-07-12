@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-picker';
 import {useDispatch} from 'react-redux';
 import {ILNullPhoto} from '../../assets';
 import {Button, Gap, Header, Input, Profile} from '../../components';
@@ -87,13 +87,13 @@ const UpdateProfile = ({navigation}) => {
   };
 
   const getImage = () => {
-    launchImageLibrary(
-      {includeBase64: true, quality: 0.3, maxWidth: 200, maxHeight: 200},
+    ImagePicker.launchImageLibrary(
+      {quality: 0.5, maxWidth: 200, maxHeight: 200},
       response => {
         if (response.didCancel || response.error) {
           showError('oops, sepertinya anda tidak memilih foto nya?');
         } else {
-          const uploadFile = `data:${response.type};base64, ${response.base64}`;
+          const uploadFile = `data:${response.type};base64, ${response.data}`;
           const source = {uri: uploadFile};
           setPhoto(source);
           // save photo direct to firebase after user select photo from the gallery

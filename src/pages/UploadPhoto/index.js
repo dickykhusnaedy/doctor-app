@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-picker';
 import {useDispatch} from 'react-redux';
 import {IconAddPhoto, IconRemovePhoto, ILNullPhoto} from '../../assets';
 import {Button, Gap, Header, Link} from '../../components';
@@ -15,14 +15,14 @@ const UploadPhoto = ({navigation, route}) => {
   const [photo, setPhoto] = useState(ILNullPhoto);
 
   const getImage = () => {
-    launchImageLibrary(
-      {includeBase64: true, quality: 0.3, maxWidth: 200, maxHeight: 200},
+    ImagePicker.launchImageLibrary(
+      {quality: 0.5, maxWidth: 200, maxHeight: 200},
       response => {
         if (response.didCancel || response.error) {
           showError('oops, sepertinya anda tidak memilih foto nya?');
         } else {
           const source = {uri: response.uri};
-          setPhotoForDB(`data:${response.type};base64, ${response.base64}`);
+          setPhotoForDB(`data:${response.type};base64, ${response.data}`);
           setPhoto(source);
           setHasPhoto(true);
         }
