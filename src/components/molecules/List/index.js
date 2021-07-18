@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {colors, fonts} from '../../../utils';
 import {
@@ -9,7 +9,20 @@ import {
   IconHelp,
 } from '../../../assets';
 
-const List = ({profile, name, desc, time, type, onPress, icon}) => {
+const List = ({profile, name, desc, time, type, onPress, icon, read, isMe}) => {
+  const [colorText, setColorText] = useState(colors.text.secondary);
+  const [fontText, setFontText] = useState(fonts.primary[300]);
+
+  // this function for trim text
+  const trimText = text => {
+    let maxLength = 60;
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength).trimEnd() + ' ...';
+    } else {
+      return text;
+    }
+  };
+
   const Icon = () => {
     if (icon === 'edit-profile') {
       return <IconEditProfile />;
@@ -25,12 +38,37 @@ const List = ({profile, name, desc, time, type, onPress, icon}) => {
     }
     return <IconEditProfile />;
   };
+
+  useEffect(() => {
+    if (read !== undefined) {
+      if (read === 1) {
+        setColorText(colors.text.secondary);
+        setFontText(fonts.primary[300]);
+      } else if (read.length === 0) {
+        setColorText(colors.text.primary);
+        setFontText(fonts.primary[700]);
+      } else {
+        if (read === 'kirim' && isMe) {
+          setColorText(colors.text.secondary);
+          setFontText(fonts.primary[300]);
+        }
+      }
+    }
+  }, [read, isMe]);
+
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       {icon ? <Icon /> : <Image source={profile} style={styles.avatar} />}
       <View style={styles.content}>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.desc}>{desc}</Text>
+        {read !== undefined && (
+          <Text style={styles.descReadAt(colorText, fontText)}>
+            {trimText(desc)}
+          </Text>
+        )}
+        {read === undefined && (
+          <Text style={styles.desc}>{trimText(desc)}</Text>
+        )}
       </View>
       <View style={styles.rate}>
         <Text style={styles.desc}>{time}</Text>
@@ -64,4 +102,9 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     textTransform: 'capitalize',
   },
+  descReadAt: (colorText, fontText) => ({
+    fontSize: 12,
+    color: colorText,
+    fontFamily: fontText,
+  }),
 });

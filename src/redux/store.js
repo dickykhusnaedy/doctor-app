@@ -1,29 +1,26 @@
 import {createStore} from 'redux';
 
-// const [profile, setProfile] = useState("prawito");
-
-// setProfile("Hudoro")
-
 const initialState = {
   loading: false,
-  name: 'Prawito Hudoro',
-  address: 'Cisauk',
+  message: 0,
 };
 
 const reducer = (state = initialState, action) => {
-  if (action.type === 'SET_LOADING') {
-    return {
-      ...state,
-      loading: action.value,
-    };
+  switch (action.type) {
+    case 'SET_LOADING':
+      return {
+        ...state,
+        loading: action.value,
+      };
+    case 'MESSAGE_COUNT':
+      return {
+        ...state,
+        message: action.value,
+      };
+
+    default:
+      return state;
   }
-  if (action.type === 'SET_NAME') {
-    return {
-      ...state,
-      name: 'Azzamy',
-    };
-  }
-  return state;
 };
 
 const store = createStore(reducer);

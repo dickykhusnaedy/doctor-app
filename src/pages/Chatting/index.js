@@ -19,6 +19,36 @@ const Chatting = ({navigation, route}) => {
   const [user, setUser] = useState({});
   const [chatData, setChatData] = useState([]);
 
+  const trimText = text => {
+    let maxLength = 40;
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength).trimEnd() + ' ...';
+    } else {
+      return text;
+    }
+  };
+
+  useEffect(() => {
+    const chatId = `${dataUstadz.data.uid}-${dataUstadz.data.fullName}_${
+      user.uid
+    }-${user.fullName}`;
+    const urlMessage = `messages/${user.uid}-${user.fullName}/${chatId}`;
+
+    if (chatData.length > 0) {
+      if (user.uid !== undefined && dataUstadz.data.uid !== undefined) {
+        Fire.database()
+          .ref(urlMessage)
+          .update({readAt: 1});
+      }
+    }
+  }, [
+    chatData.length,
+    dataUstadz.data.fullName,
+    dataUstadz.data.uid,
+    user.fullName,
+    user.uid,
+  ]);
+
   useEffect(() => {
     getDataUserFromLocal();
     const chatID = `${dataUstadz.data.uid}-${dataUstadz.data.fullName}_${
@@ -59,8 +89,6 @@ const Chatting = ({navigation, route}) => {
       setUser(res);
     });
   };
-
-  console.log(dataUstadz);
 
   const chatSend = () => {
     const today = new Date();
@@ -130,7 +158,7 @@ const Chatting = ({navigation, route}) => {
         soundName: 'default',
         notification: {
           title: `${user.fullName}`,
-          body: `${chatContent}`,
+          body: `${trimText(chatContent)}`,
         },
         data: {
           msgType: 'Chat',
