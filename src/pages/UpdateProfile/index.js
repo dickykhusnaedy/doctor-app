@@ -44,7 +44,6 @@ const UpdateProfile = ({navigation}) => {
         user
           .updatePassword(password)
           .then(() => {
-            console.log('update password');
             showSuccess('Your password has been changed successfully');
             navigation.replace('MainApp');
           })
@@ -65,7 +64,6 @@ const UpdateProfile = ({navigation}) => {
         storeData('user', data)
           .then(() => {
             setTimeout(() => {
-              console.log('update data');
               dispatch({type: 'SET_LOADING', value: false});
               navigation.replace('MainApp');
             }, 3000);
@@ -110,8 +108,6 @@ const UpdateProfile = ({navigation}) => {
             const data = profile;
             data.photo = uploadFile;
             storeData('user', data);
-
-            console.log('data localstorage', data);
 
             dispatch({type: 'SET_LOADING', value: false});
             navigation.replace('MainApp');

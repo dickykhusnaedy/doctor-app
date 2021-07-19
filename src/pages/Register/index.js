@@ -76,7 +76,6 @@ const Register = ({navigation}) => {
           messaging()
             .getToken()
             .then(token => {
-              console.log('message.getToken ', token);
               setGetToken(token);
             });
 

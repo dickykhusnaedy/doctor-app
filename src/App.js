@@ -77,7 +77,6 @@ const MainApp = () => {
                 color: colors.white,
                 onPress: () => {
                   forwardToChatPage(idChat, dataChat);
-                  console.log('Pindah halmaann');
                 },
               });
               break;
@@ -91,7 +90,6 @@ const MainApp = () => {
     messaging()
       .requestPermission()
       .then(authStatus => {
-        console.log('APNs Status: ', authStatus);
         if (
           authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
           // eslint-disable-next-line eqeqeq

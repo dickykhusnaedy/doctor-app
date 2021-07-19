@@ -58,7 +58,6 @@ const Chatting = ({navigation, route}) => {
     Fire.database()
       .ref(urlFirebase)
       .on('value', snapshot => {
-        console.log('data chat: ', snapshot.val());
         if (snapshot.val()) {
           const dataSnapshot = snapshot.val();
           const allDataChat = [];
@@ -78,7 +77,6 @@ const Chatting = ({navigation, route}) => {
               data: newDataChat,
             });
           });
-          console.log('all data chat: ', allDataChat);
           setChatData(allDataChat);
         }
       });
@@ -123,6 +121,7 @@ const Chatting = ({navigation, route}) => {
       lastChatDate: setDateChat(today),
       lastChatTime: getChatTime(today),
       uidPartner: user.uid,
+      readAt: '',
       lastChatDatetime: getDateTime(today),
     };
 
